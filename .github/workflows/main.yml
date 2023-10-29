@@ -1,18 +1,26 @@
+name: Dynamic Jobs Based on Actor
+
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
-    runs-on: macos-latest
+  dynamic_jobs:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [main, develop]
+        actor: [user1, user2, user3]  # Add GitHub actor profile names here
 
     steps:
-      - name: Set workflow run name
-        run: |
-          github.actions.workflow_run.update({
-            name: "Build ${github.ref_name}"
-          })
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      # ...
+      - name: Perform Workflow Actions
+        run: |
+          if [ "${{ github.actor }}" == "${{ matrix.actor }}" ]; then
+            echo "Performing actions for actor: ${{ matrix.actor }}"
+            # Add your workflow steps here
+          else
+            echo "Skipping actions for actor: ${{ matrix.actor }}"
+          fi
