@@ -1,7 +1,18 @@
 on:
   workflow_dispatch:
-   
+
 jobs:
-  manual_dispatch:
+  build:
     runs-on: macos-latest
-    name: ${{ github.actor }}
+    strategy:
+      matrix:
+        branch: [main, develop]
+
+    steps:
+      - name: Set workflow run name
+        run: |
+          github.actions.workflow_run.update({
+            name: "Build ${github.ref_name}"
+          })
+
+      # ...
