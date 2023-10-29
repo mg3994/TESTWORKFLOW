@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-
+run-name: by @${{ github.actor }}
 jobs:
   dynamic_jobs:
     runs-on: ubuntu-latest
